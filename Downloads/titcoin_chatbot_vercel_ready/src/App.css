@@ -1,9 +1,0 @@
-.app {
-  display: flex;
-  height: 100vh;
-  background: #111;
-  color: white;
-}
-.model-viewer {
-  flex: 1;
-}
