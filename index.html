@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>$2012 — Me in 2012</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --neon-green: #00ff41;
+  --neon-pink: #ff2d7b;
+  --neon-blue: #00d4ff;
+  --neon-purple: #b026ff;
+  --neon-yellow: #ffe600;
+  --bg-dark: #0a0a0f;
+  --glass: rgba(10,10,20,0.45);
+  --glass-hover: rgba(15,15,30,0.55);
+  --glass-border: rgba(255,255,255,0.08);
+  --text-dim: #8a8aaa;
+  --text-mid: #aaaacc;
+  --text-bright: #f0f0ff;
+  --red: #ff3b3b;
+  --green: #00ff41;
+}
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: #000;
+  font-family: 'Space Mono', monospace;
+  color: var(--text-bright);
+}
+
+/* ============ ENTER SCREEN ============ */
+#enter-screen {
+  position: fixed; inset: 0; z-index: 1000;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: #000;
+  cursor: pointer;
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+#enter-screen.hidden { opacity: 0; transform: scale(1.05); pointer-events: none; }
+
+#enter-video {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0.85;
+}
+
+.enter-overlay {
+  position: relative; z-index: 2;
+  text-align: center;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 20px;
+}
+.enter-title {
+  font-family: 'Press Start 2P', cursive;
+  font-size: clamp(28px, 6vw, 72px);
+  color: #fff;
+  text-shadow: 0 0 10px var(--neon-green), 0 0 30px var(--neon-green), 0 0 60px var(--neon-green), 0 0 100px rgba(0,255,65,0.3);
+  animation: glowPulse 2s ease-in-out infinite alternate;
+  letter-spacing: 4px;
+}
+.enter-subtitle {
+  font-family: 'VT323', monospace;
+  font-size: clamp(16px, 3vw, 32px);
+  color: var(--neon-blue);
+  text-shadow: 0 0 15px var(--neon-blue);
+  letter-spacing: 6px;
+  text-transform: uppercase;
+}
+.enter-btn {
+  margin-top: 20px; padding: 16px 48px;
+  border: 2px solid var(--neon-green);
+  background: rgba(0,255,65,0.08);
+  color: var(--neon-green);
+  font-family: 'Press Start 2P', cursive;
+  font-size: clamp(10px, 1.8vw, 16px);
+  cursor: pointer; text-transform: uppercase; letter-spacing: 3px;
+  position: relative; overflow: hidden;
+  animation: btnPulse 1.5s ease-in-out infinite;
+  transition: all 0.3s;
+}
+.enter-btn:hover { background: rgba(0,255,65,0.2); box-shadow: 0 0 30px rgba(0,255,65,0.3); transform: scale(1.05); }
+.enter-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(0,255,65,0.2), transparent); animation: shimmer 2s infinite; }
+
+.vhs-lines { position: absolute; inset: 0; z-index: 1; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px); pointer-events: none; }
+.noise-overlay { position: absolute; inset: 0; z-index: 1; opacity: 0.04; pointer-events: none; animation: noiseShift 0.5s steps(5) infinite;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+@keyframes glowPulse { from { text-shadow: 0 0 10px var(--neon-green), 0 0 30px var(--neon-green), 0 0 60px var(--neon-green); } to { text-shadow: 0 0 20px var(--neon-green), 0 0 50px var(--neon-green), 0 0 100px var(--neon-green); } }
+@keyframes btnPulse { 0%,100% { box-shadow: 0 0 10px rgba(0,255,65,0.2); } 50% { box-shadow: 0 0 25px rgba(0,255,65,0.4); } }
+@keyframes shimmer { 0% { left: -100%; } 100% { left: 100%; } }
+@keyframes noiseShift { 0% { transform: translate(0,0); } 20% { transform: translate(-2px,1px); } 40% { transform: translate(1px,-1px); } 60% { transform: translate(-1px,2px); } 80% { transform: translate(2px,-2px); } 100% { transform: translate(0,0); } }
+
+/* ============ BTC BREAKING NEWS (enter screen) ============ */
+@keyframes tickBlink { 0%,49% { opacity:1; } 50%,100% { opacity:0.3; } }
+.btc-breaking { position: absolute; bottom: 8%; left: 50%; transform: translateX(-50%); z-index: 3; text-align: center; pointer-events: none; background: rgba(0,0,0,0.85); padding: 12px 28px; border: 2px solid #f00; box-shadow: 0 0 30px rgba(255,0,0,0.4); }
+.btc-breaking .breaking-label { font-family: 'Press Start 2P',cursive; font-size: clamp(10px,1.4vw,14px); color: #f00; letter-spacing: 3px; animation: tickBlink 0.8s steps(1) infinite; margin-bottom: 6px; }
+.btc-breaking .breaking-text { font-family: 'VT323',monospace; font-size: clamp(16px,2.5vw,28px); color: #ff6600; letter-spacing: 2px; }
+.btc-breaking .breaking-text .br-price { color: #0f0; font-size: clamp(20px,3vw,34px); text-shadow: 0 0 15px rgba(0,255,0,0.8); }
+@media (max-width:768px) { .btc-breaking { padding:8px 16px; } }
+
+/* ============ MAIN SITE ============ */
+#main-site { display: none; width: 100%; height: 100%; overflow-y: auto; position: relative; }
+#main-site.active { display: block; animation: fadeIn 1s ease; }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+/* BG VIDEO - PROMINENT */
+#bg-video-wrap { position: fixed; inset: 0; z-index: 0; overflow: hidden; }
+#bg-video-main { width: 100%; height: 100%; object-fit: cover; opacity: 0.75; filter: saturate(1.3) brightness(1.2); }
+#bg-video-wrap::after {
+  content: ''; position: absolute; inset: 0;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.1) 30%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.35) 100%);
+}
+
+.site-content { position: relative; z-index: 1; }
+
+/* HEADER - glass */
+.site-header {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 24px;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(25px);
+  border-bottom: 1px solid var(--glass-border);
+}
+.header-left { display: flex; align-items: center; gap: 16px; }
+.logo-ticker { font-family: 'Press Start 2P',cursive; font-size: 14px; color: var(--neon-green); text-shadow: 0 0 10px rgba(0,255,65,0.5); }
+.logo-name { font-size: 12px; color: var(--text-mid); }
+.chain-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: rgba(153,69,255,0.15); border: 1px solid rgba(153,69,255,0.3); border-radius: 20px; font-size: 11px; color: #bb88ff; }
+.chain-dot { width: 6px; height: 6px; background: #9945ff; border-radius: 50%; box-shadow: 0 0 6px #9945ff; }
+.header-right { display: flex; align-items: center; gap: 12px; }
+.buy-btn { padding: 8px 20px; background: linear-gradient(135deg,var(--neon-green),#00cc33); color: #000; font-family: 'Space Mono',monospace; font-weight: 700; font-size: 12px; border: none; border-radius: 6px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; text-decoration: none; transition: all 0.2s; }
+.buy-btn:hover { box-shadow: 0 0 20px rgba(0,255,65,0.4); transform: translateY(-1px); }
+.dex-link { padding: 8px 16px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.05); color: var(--text-mid); font-family: 'Space Mono',monospace; font-size: 11px; border-radius: 6px; cursor: pointer; text-decoration: none; transition: all 0.2s; }
+.dex-link:hover { border-color: var(--neon-blue); color: var(--neon-blue); }
+
+.glow-line { height: 2px; background: linear-gradient(90deg, transparent, var(--neon-green), var(--neon-blue), var(--neon-purple), transparent); opacity: 0.6; }
+
+/* ============ HERO - glass ============ */
+.nostalgia-hero { position: relative; padding: 60px 24px; text-align: center; }
+.hero-main-title { font-family: 'Press Start 2P',cursive; font-size: clamp(32px,7vw,80px); color: #fff; text-shadow: 0 0 20px var(--neon-green), 0 0 60px var(--neon-green), 0 0 100px rgba(0,255,65,0.3), 0 2px 4px rgba(0,0,0,0.8); line-height: 1.2; margin-bottom: 16px; }
+.hero-main-title .green { color: var(--neon-green); }
+.hero-theme { font-family: 'VT323',monospace; font-size: clamp(20px,3.5vw,38px); color: var(--neon-yellow); text-shadow: 0 0 15px rgba(255,230,0,0.6), 0 2px 4px rgba(0,0,0,0.8); letter-spacing: 3px; margin-bottom: 12px; }
+.hero-tagline { font-family: 'VT323',monospace; font-size: clamp(14px,2vw,22px); color: var(--text-bright); letter-spacing: 2px; margin-bottom: 24px; text-shadow: 0 2px 6px rgba(0,0,0,0.8); }
+.hero-tagline span { color: var(--neon-pink); text-shadow: 0 0 10px rgba(255,45,123,0.5); }
+.hero-subtext { font-size: 13px; color: var(--text-mid); max-width: 650px; margin: 0 auto; line-height: 1.6; text-shadow: 0 1px 4px rgba(0,0,0,0.8); }
+
+.hero-ticker-strip { margin-top: 30px; padding: 10px 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); overflow: hidden; white-space: nowrap; background: rgba(0,0,0,0.3); }
+.ticker-scroll { display: inline-block; animation: tickerScroll 30s linear infinite; font-family: 'VT323',monospace; font-size: 16px; color: var(--text-mid); }
+.ticker-scroll span { margin: 0 24px; }
+.ticker-scroll .highlight { color: var(--neon-green); } .ticker-scroll .pink { color: var(--neon-pink); } .ticker-scroll .blue { color: var(--neon-blue); } .ticker-scroll .yellow { color: var(--neon-yellow); } .ticker-scroll .purple { color: var(--neon-purple); }
+@keyframes tickerScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+/* ============ PRICE BAR - glass ============ */
+.price-bar { display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; background: rgba(0,0,0,0.4); backdrop-filter: blur(15px); border-bottom: 1px solid var(--glass-border); flex-wrap: wrap; gap: 12px; }
+.price-bar-left { display: flex; align-items: center; gap: 16px; }
+.price-bar-ticker { font-family: 'Press Start 2P',cursive; font-size: 16px; color: var(--neon-green); text-shadow: 0 0 12px rgba(0,255,65,0.5); }
+.price-bar-value { font-family: 'VT323',monospace; font-size: 28px; color: var(--neon-green); text-shadow: 0 0 10px rgba(0,255,65,0.3); }
+.price-bar-value .dim { color: var(--text-dim); }
+.price-change { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; background: rgba(255,59,59,0.15); border: 1px solid rgba(255,59,59,0.3); border-radius: 4px; font-size: 13px; font-weight: 700; }
+.price-change.negative { color: var(--red); }
+.price-bar-stats { display: flex; gap: 20px; flex-wrap: wrap; }
+.price-bar-stat { text-align: center; }
+.price-bar-stat-label { font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+.price-bar-stat-val { font-family: 'VT323',monospace; font-size: 18px; color: var(--text-bright); }
+
+/* ============ NAV - glass ============ */
+.nostalgia-nav { display: flex; justify-content: center; gap: 0; padding: 0 24px; margin-top: 0; border-bottom: 1px solid var(--glass-border); background: rgba(0,0,0,0.35); backdrop-filter: blur(15px); }
+.nav-tab { padding: 14px 28px; font-family: 'Press Start 2P',cursive; font-size: 11px; color: var(--text-dim); cursor: pointer; border: none; background: none; text-transform: uppercase; letter-spacing: 1px; position: relative; transition: all 0.3s; }
+.nav-tab:hover { color: var(--text-bright); }
+.nav-tab.active { color: var(--neon-green); text-shadow: 0 0 10px rgba(0,255,65,0.4); }
+.nav-tab.active::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: var(--neon-green); box-shadow: 0 0 10px var(--neon-green); }
+.nav-tab .tab-icon { display: block; font-size: 18px; margin-bottom: 4px; font-family: 'VT323',monospace; }
+
+/* ============ CONTENT ============ */
+.tab-content { display: none; padding: 24px; animation: fadeIn 0.4s ease; }
+.tab-content.active { display: block; }
+.section-title { font-family: 'Press Start 2P',cursive; font-size: 12px; color: var(--neon-blue); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; text-shadow: 0 2px 6px rgba(0,0,0,0.8); }
+.section-title::before { content: '//'; color: var(--text-dim); }
+
+/* GLASS CARD GRID */
+.nostalgia-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-bottom: 32px; }
+
+.nostalgia-card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.nostalgia-card:hover {
+  border-color: rgba(0,255,65,0.3);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 20px rgba(0,255,65,0.08);
+  background: var(--glass-hover);
+}
+
+.card-visual { height: 180px; position: relative; overflow: hidden; background: #111; }
+.card-visual img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+.nostalgia-card:hover .card-visual img { transform: scale(1.08); }
+.card-visual::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.7) 100%); }
+.card-play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); z-index: 2; width: 50px; height: 50px; background: rgba(0,0,0,0.6); border: 2px solid rgba(255,255,255,0.5); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #fff; opacity: 0; transition: opacity 0.3s; }
+.nostalgia-card:hover .card-play-icon { opacity: 1; }
+
+.card-video { position: relative; height: 180px; background: #000; }
+.card-video iframe { width: 100%; height: 100%; border: 0; }
+
+.card-body { padding: 16px; }
+.card-title { font-family: 'Press Start 2P',cursive; font-size: 10px; color: var(--text-bright); margin-bottom: 8px; line-height: 1.5; }
+.card-desc { font-size: 12px; color: var(--text-mid); line-height: 1.6; margin-bottom: 10px; }
+.card-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.card-tag { padding: 3px 8px; border-radius: 3px; font-size: 10px; font-family: 'VT323',monospace; }
+.tag-green { background: rgba(0,255,65,0.12); color: var(--neon-green); border: 1px solid rgba(0,255,65,0.25); }
+.tag-pink { background: rgba(255,45,123,0.12); color: var(--neon-pink); border: 1px solid rgba(255,45,123,0.25); }
+.tag-blue { background: rgba(0,212,255,0.12); color: var(--neon-blue); border: 1px solid rgba(0,212,255,0.25); }
+.tag-purple { background: rgba(176,38,255,0.12); color: var(--neon-purple); border: 1px solid rgba(176,38,255,0.25); }
+.tag-yellow { background: rgba(255,230,0,0.12); color: var(--neon-yellow); border: 1px solid rgba(255,230,0,0.25); }
+
+/* ============ CHART - glass ============ */
+.chart-section { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 12px; overflow: hidden; backdrop-filter: blur(12px); }
+.chart-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--glass-border); }
+.chart-title { font-size: 13px; color: var(--text-mid); display: flex; align-items: center; gap: 8px; }
+.chart-title .live-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: livePulse 1.5s infinite; }
+@keyframes livePulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+.timeframes { display: flex; gap: 2px; }
+.tf-btn { padding: 6px 12px; background: transparent; border: 1px solid transparent; color: var(--text-dim); font-family: 'Space Mono',monospace; font-size: 11px; cursor: pointer; border-radius: 4px; transition: all 0.2s; }
+.tf-btn:hover { color: var(--text-mid); }
+.tf-btn.active { background: rgba(0,212,255,0.1); border-color: rgba(0,212,255,0.3); color: var(--neon-blue); }
+.chart-container { height: 350px; padding: 20px; position: relative; }
+canvas#priceChart { width: 100% !important; height: 100% !important; }
+
+.token-panel { margin: 16px 0 0; display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 16px; }
+.info-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 12px; padding: 20px; backdrop-filter: blur(12px); }
+.info-card-title { font-family: 'Press Start 2P',cursive; font-size: 10px; color: var(--neon-blue); margin-bottom: 16px; text-transform: uppercase; }
+.info-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.info-row:last-child { border: none; }
+.info-row-label { font-size: 12px; color: var(--text-dim); }
+.info-row-value { font-family: 'VT323',monospace; font-size: 16px; color: var(--text-bright); }
+.info-row-value.mono { font-family: 'Space Mono',monospace; font-size: 11px; color: var(--neon-blue); }
+
+/* ============ iPOD PLAYER ============ */
+.ipod-wrapper { display: flex; justify-content: center; padding: 20px 0; }
+.ipod-device {
+  width: 340px; background: linear-gradient(180deg, #e8e8e8 0%, #d0d0d0 10%, #c8c8c8 50%, #b0b0b0 90%, #a0a0a0 100%);
+  border-radius: 30px; padding: 20px; box-shadow: 0 8px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -1px 3px rgba(0,0,0,0.2);
+  border: 1px solid #999;
+}
+.ipod-screen {
+  background: #1a1a2e; border-radius: 8px; overflow: hidden;
+  border: 3px solid #555; box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
+}
+.ipod-header {
+  background: linear-gradient(180deg, #2a2a4a, #1a1a3a);
+  padding: 6px 12px; display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.ipod-header-title { font-family: 'Press Start 2P',cursive; font-size: 8px; color: var(--neon-green); }
+.ipod-header-battery { font-family: 'VT323',monospace; font-size: 14px; color: var(--neon-green); }
+.ipod-now-playing {
+  padding: 12px; text-align: center;
+  background: linear-gradient(180deg, #0a0a1a 0%, #0f0f2a 100%);
+}
+.ipod-album-art {
+  width: 200px; height: 200px; margin: 0 auto 10px; border-radius: 4px; overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.1);
+  position: relative; background: #000;
+}
+.ipod-album-art img { width: 100%; height: 100%; object-fit: cover; }
+.ipod-song-title { font-family: 'Press Start 2P',cursive; font-size: 8px; color: #fff; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ipod-song-artist { font-family: 'VT323',monospace; font-size: 16px; color: var(--text-mid); }
+.ipod-progress { margin: 10px 0 4px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
+.ipod-progress-bar { height: 100%; background: var(--neon-blue); border-radius: 2px; width: 0%; transition: width 0.3s linear; }
+.ipod-time { display: flex; justify-content: space-between; font-family: 'VT323',monospace; font-size: 13px; color: var(--text-dim); }
+.ipod-playlist {
+  max-height: 180px; overflow-y: auto; border-top: 1px solid rgba(255,255,255,0.08);
+}
+.ipod-playlist::-webkit-scrollbar { width: 4px; }
+.ipod-playlist::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
+.ipod-track {
+  display: flex; align-items: center; gap: 10px; padding: 8px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: background 0.2s;
+}
+.ipod-track:hover { background: rgba(0,255,65,0.08); }
+.ipod-track.active { background: rgba(0,255,65,0.12); }
+.ipod-track-num { font-family: 'VT323',monospace; font-size: 16px; color: var(--text-dim); width: 20px; text-align: center; }
+.ipod-track.active .ipod-track-num { color: var(--neon-green); }
+.ipod-track-info { flex: 1; min-width: 0; }
+.ipod-track-name { font-size: 11px; color: var(--text-bright); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ipod-track-by { font-family: 'VT323',monospace; font-size: 13px; color: var(--text-dim); }
+.ipod-track-dur { font-family: 'VT323',monospace; font-size: 14px; color: var(--text-dim); }
+.ipod-track.active .ipod-track-name { color: var(--neon-green); }
+
+/* iPod click wheel */
+.ipod-wheel {
+  margin: 18px auto 4px; width: 200px; height: 200px; border-radius: 50%;
+  background: linear-gradient(145deg, #e0e0e0, #aaa); position: relative;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.4);
+  user-select: none;
+}
+.ipod-wheel-center {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  width: 70px; height: 70px; border-radius: 50%;
+  background: linear-gradient(145deg, #ddd, #bbb);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.5);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background 0.1s;
+}
+.ipod-wheel-center:hover { background: linear-gradient(145deg, #eee, #ccc); }
+.ipod-wheel-center:active { background: linear-gradient(145deg, #ccc, #aaa); }
+.ipod-wheel-label {
+  position: absolute; font-family: 'Space Mono',monospace; font-size: 11px; font-weight: 700; color: #666;
+  user-select: none;
+}
+.wl-menu { top: 14px; left: 50%; transform: translateX(-50%); }
+.wl-prev { left: 18px; top: 50%; transform: translateY(-50%); font-size: 16px; cursor: pointer; }
+.wl-next { right: 18px; top: 50%; transform: translateY(-50%); font-size: 16px; cursor: pointer; }
+.wl-play { bottom: 14px; left: 50%; transform: translateX(-50%); font-size: 14px; cursor: pointer; }
+.wl-prev:hover, .wl-next:hover, .wl-play:hover { color: #333; }
+
+/* BTC WAS $5 BANNER */
+.btc-was-5 { background: rgba(0,0,0,0.5); backdrop-filter: blur(15px); border-top: 2px solid rgba(255,165,0,0.5); border-bottom: 2px solid rgba(255,165,0,0.5); padding: 18px 24px; overflow: hidden; }
+.btc5-inner { display: flex; align-items: center; justify-content: center; gap: 20px; }
+.btc5-icon { font-size: 36px; color: #ff9900; text-shadow: 0 0 20px rgba(255,153,0,0.6); animation: btc5pulse 2s ease-in-out infinite alternate; }
+@keyframes btc5pulse { from { text-shadow: 0 0 10px rgba(255,153,0,0.4); } to { text-shadow: 0 0 30px rgba(255,153,0,0.8), 0 0 60px rgba(255,153,0,0.3); } }
+.btc5-text { text-align: center; }
+.btc5-headline { font-family: 'Press Start 2P',cursive; font-size: clamp(12px,2.2vw,20px); color: #fff; letter-spacing: 2px; margin-bottom: 6px; text-shadow: 0 2px 8px rgba(0,0,0,0.8); }
+.btc5-price { color: #00ff41; text-shadow: 0 0 15px rgba(0,255,65,0.6); }
+.btc5-sub { font-family: 'VT323',monospace; font-size: clamp(14px,2vw,20px); color: #ff9900; letter-spacing: 1px; text-shadow: 0 1px 4px rgba(0,0,0,0.8); }
+.btc5-now { color: #00ff41; font-size: clamp(16px,2.2vw,24px); text-shadow: 0 0 12px rgba(0,255,65,0.5); }
+
+/* REMEMBER STRIP */
+.remember-strip { margin: 0 24px 24px; padding: 20px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 10px; text-align: center; backdrop-filter: blur(12px); }
+.remember-strip .remember-label { font-family: 'Press Start 2P',cursive; font-size: 9px; color: var(--neon-pink); letter-spacing: 2px; margin-bottom: 12px; }
+.remember-strip .remember-text { font-family: 'VT323',monospace; font-size: 22px; color: var(--text-bright); line-height: 1.5; }
+.remember-strip .remember-text span { color: var(--neon-yellow); }
+
+/* FOOTER */
+.site-footer { padding: 40px 24px; text-align: center; border-top: 1px solid var(--glass-border); margin-top: 20px; background: rgba(0,0,0,0.5); }
+.footer-logo { font-family: 'Press Start 2P',cursive; font-size: 18px; color: var(--neon-green); text-shadow: 0 0 15px rgba(0,255,65,0.4); margin-bottom: 12px; }
+.footer-text { font-size: 11px; color: var(--text-dim); letter-spacing: 1px; }
+.footer-links { margin-top: 16px; display: flex; justify-content: center; gap: 20px; }
+.footer-links a { color: var(--text-dim); text-decoration: none; font-size: 12px; transition: color 0.2s; }
+.footer-links a:hover { color: var(--neon-blue); }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .header-right { gap: 8px; } .dex-link { display: none; }
+  .nostalgia-hero { padding: 40px 16px; }
+  .nostalgia-nav { padding: 0 8px; overflow-x: auto; justify-content: flex-start; }
+  .nav-tab { padding: 12px 16px; font-size: 9px; white-space: nowrap; }
+  .tab-content { padding: 16px; }
+  .nostalgia-grid { grid-template-columns: 1fr; }
+  .chart-container { height: 260px; }
+  .remember-strip { margin: 0 16px 16px; }
+  .price-bar { padding: 10px 16px; }
+  .site-header { padding: 10px 16px; }
+}
+
+#main-site::-webkit-scrollbar { width: 6px; }
+#main-site::-webkit-scrollbar-track { background: transparent; }
+#main-site::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+/* Subtle scanlines */
+.site-content::after { content: ''; position: fixed; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.02) 3px, rgba(0,0,0,0.02) 6px); pointer-events: none; z-index: 999; }
+</style>
+</head>
+<body>
+
+<!-- ===== ENTER SCREEN ===== -->
+<div id="enter-screen" onclick="enterSite()">
+  <video id="enter-video" autoplay loop muted playsinline>
+    <source src="enter-video.mp4" type="video/mp4">
+  </video>
+  <div class="vhs-lines"></div>
+  <div class="noise-overlay"></div>
+
+  <div class="btc-breaking"><div class="breaking-label">&#9608; BREAKING NEWS &#9608;</div><div class="breaking-text">1 BITCOIN = <span class="br-price">$5.27</span> &mdash; "Internet Money is a Joke"</div></div>
+
+  <div class="enter-overlay">
+    <div class="enter-title">$2012</div>
+    <div class="enter-subtitle">Me in 2012</div>
+    <button class="enter-btn">&#9654; Enter Site</button>
+  </div>
+</div>
+
+<!-- ===== MAIN SITE ===== -->
+<div id="main-site">
+  <div id="bg-video-wrap">
+    <video id="bg-video-main" autoplay loop muted playsinline>
+      <source src="bg-video.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <div class="site-content">
+    <div class="glow-line"></div>
+
+    <header class="site-header">
+      <div class="header-left">
+        <div><span class="logo-ticker">$2012</span><span class="logo-name"> / SOL</span></div>
+        <div class="chain-badge"><span class="chain-dot"></span> Solana &middot; PumpSwap</div>
+      </div>
+      <div class="header-right">
+        <a href="https://dexscreener.com/solana/gcml56gw3gaurccwubenkp88fnfvzshv7wq7jzfayqt" target="_blank" class="dex-link">DexScreener &nearr;</a>
+        <a href="https://dexscreener.com/solana/gcml56gw3gaurccwubenkp88fnfvzshv7wq7jzfayqt" target="_blank" class="buy-btn">Buy $2012</a>
+      </div>
+    </header>
+
+    <div class="nostalgia-hero">
+      <div class="hero-main-title">Me in <span class="green">2012</span></div>
+      <div class="hero-theme">Why Didn't You Buy Bitcoin in 2012?</div>
+      <div class="hero-tagline">It was <span>$5.27</span> &mdash; and you were busy playing Black Ops 2</div>
+      <div class="hero-subtext">Gangnam Style. MW3 rage quits. YOLO. The Avengers. Gotye on repeat.<br>BTC was $5 and nobody cared. This is a time capsule for the culture that shaped us &mdash; and the trade we all missed.</div>
+      <div class="hero-ticker-strip"><div class="ticker-scroll">
+        <span class="highlight">BTC = $5</span><span class="pink">GANGNAM STYLE</span><span>KONY 2012</span><span class="blue">MINECRAFT 1.0</span><span class="yellow">YOLO</span><span>CALL ME MAYBE</span><span class="purple">THE AVENGERS</span><span class="highlight">MW3</span><span class="pink">INSTAGRAM FILTERS</span><span>TEMPLE RUN</span><span class="blue">DUBSTEP</span><span class="yellow">SWAG</span>
+        <span class="highlight">BTC = $5</span><span class="pink">GANGNAM STYLE</span><span>KONY 2012</span><span class="blue">MINECRAFT 1.0</span><span class="yellow">YOLO</span><span>CALL ME MAYBE</span><span class="purple">THE AVENGERS</span><span class="highlight">MW3</span><span class="pink">INSTAGRAM FILTERS</span><span>TEMPLE RUN</span><span class="blue">DUBSTEP</span><span class="yellow">SWAG</span>
+      </div></div>
+    </div>
+
+    <div class="btc-was-5">
+      <div class="btc5-inner">
+        <span class="btc5-icon">&#8383;</span>
+        <div class="btc5-text">
+          <div class="btc5-headline">BITCOIN WAS <span class="btc5-price">$5.27</span> IN 2012</div>
+          <div class="btc5-sub">1 BTC = $5.27 &bull; You bought a Happy Meal instead &bull; That $5 would be worth <span class="btc5-now" id="btc-today-val">$100,000+</span> today</div>
+        </div>
+        <span class="btc5-icon">&#8383;</span>
+      </div>
+    </div>
+
+    <div class="price-bar">
+      <div class="price-bar-left">
+        <span class="price-bar-ticker">$2012</span>
+        <div class="price-bar-value" id="live-price">Loading...</div>
+        <span class="price-change negative" id="live-change">--</span>
+      </div>
+      <div class="price-bar-stats">
+        <div class="price-bar-stat"><div class="price-bar-stat-label">Mkt Cap</div><div class="price-bar-stat-val" id="live-mcap" style="color:var(--neon-blue)">--</div></div>
+        <div class="price-bar-stat"><div class="price-bar-stat-label">Liq</div><div class="price-bar-stat-val" id="live-liq">--</div></div>
+        <div class="price-bar-stat"><div class="price-bar-stat-label">24H Vol</div><div class="price-bar-stat-val" id="live-vol" style="color:var(--neon-green)">--</div></div>
+        <div class="price-bar-stat"><div class="price-bar-stat-label">Txns</div><div class="price-bar-stat-val" id="live-txns">--</div></div>
+        <div class="price-bar-stat"><div class="price-bar-stat-label">Buy/Sell</div><div class="price-bar-stat-val" id="live-buysell">--</div></div>
+      </div>
+    </div>
+
+    <nav class="nostalgia-nav">
+      <button class="nav-tab active" data-tab="games"><span class="tab-icon">&#127918;</span> Games</button>
+      <button class="nav-tab" data-tab="music"><span class="tab-icon">&#127925;</span> Music</button>
+      <button class="nav-tab" data-tab="movies"><span class="tab-icon">&#127916;</span> Movies</button>
+      <button class="nav-tab" data-tab="chart"><span class="tab-icon">&#128200;</span> Chart</button>
+    </nav>
+
+    <!-- ===== GAMES ===== -->
+    <div class="tab-content active" id="tab-games">
+      <div class="section-title">Games That Defined 2012</div>
+      <div class="nostalgia-grid">
+        <a class="nostalgia-card" href="https://www.youtube.com/watch?v=8ZMUdfDsaZM" target="_blank"><div class="card-visual"><img src="https://img.youtube.com/vi/8ZMUdfDsaZM/hqdefault.jpg" alt="MW3"><div class="card-play-icon">&#9654;</div></div><div class="card-body"><div class="card-title">Call of Duty: MW3</div><div class="card-desc">360 no-scopes, trickshotting lobbies, and intervention quickscopes. The golden age of COD multiplayer.</div><div class="card-tags"><span class="card-tag tag-green">FPS</span><span class="card-tag tag-pink">Xbox 360</span><span class="card-tag tag-blue">Legendary</span></div></div></a>
+
+        <a class="nostalgia-card" href="https://www.youtube.com/watch?v=MmB9b5njVbA" target="_blank"><div class="card-visual"><img src="https://img.youtube.com/vi/MmB9b5njVbA/hqdefault.jpg" alt="Minecraft"><div class="card-play-icon">&#9654;</div></div><div class="card-body"><div class="card-title">Minecraft</div><div class="card-desc">Building dirt houses, surviving the first night, and hearing that cave sound at 2am. Xbox 360 edition just dropped.</div><div class="card-tags"><span class="card-tag tag-green">Sandbox</span><span class="card-tag tag-yellow">Iconic</span></div></div></a>
+
+        <a class="nostalgia-card" href="https://www.youtube.com/watch?v=x3tedlWs1XY" target="_blank"><div class="card-visual"><img src="https://img.youtube.com/vi/x3tedlWs1XY/hqdefault.jpg" alt="Black Ops 2"><div class="card-play-icon">&#9654;</div></div><div class="card-body"><div class="card-title">Black Ops 2</div><div class="card-desc">The GOAT Call of Duty. Nuketown 24/7, emblem editor art, and the most balanced multiplayer ever made.</div><div class="card-tags"><span class="card-tag tag-pink">FPS</span><span class="card-tag tag-purple">GOAT</span><span class="card-tag tag-green">Nov 2012</span></div></div></a>
+
+        <a class="nostalgia-card" href="https://www.youtube.com/watch?v=DIspQ1NmGf4" target="_blank"><div class="card-visual"><img src="https://img.youtube.com/vi/DIspQ1NmGf4/hqdefault.jpg" alt="Halo 4"><div class="card-play-icon">&#9654;</div></div><div class="card-body"><div class="card-title">Halo 4</div><div class="card-desc">Master Chief returned. Custom games, forge maps, and late-night Xbox Live parties with the boys.</div><div class="card-tags"><span class="card-tag tag-blue">FPS</span><span class="card-tag tag-purple">Xbox</span></div></div></a>
+
+        <a class="nostalgia-card" href="https://www.youtube.com/watch?v=OiGhns7Vmic" target="_blank"><div class="card-visual"><img src="https://img.youtube.com/vi/OiGhns7Vmic/hqdefault.jpg" alt="FIFA 13"><div class="card-play-icon">&#9654;</div></div><div class="card-body"><div class="card-title">FIFA 13</div><div class="card-desc">The one with the iconic soundtrack. Ultimate Team packs, raging at scripting, and skill move goals.</div><div class="card-tags"><span class="card-tag tag-green">Sports</span><span class="card-tag tag-blue">FIFA UT</span></div></div></a>
+
+        <a class="nostalgia-card" href="https://www.youtube.com/watch?v=gZrklEy9ohQ" target="_blank"><div class="card-visual"><img src="https://img.youtube.com/vi/gZrklEy9ohQ/hqdefault.jpg" alt="AC3"><div class="card-play-icon">&#9654;</div></div><div class="card-body"><div class="card-title">Assassin's Creed III</div><div class="card-desc">Connor running through colonial America. The hype was unreal after the Ezio trilogy.</div><div class="card-tags"><span class="card-tag tag-purple">Action</span><span class="card-tag tag-yellow">Open World</span></div></div></a>
+
+        <a class="nostalgia-card" href="https://www.youtube.com/watch?v=ev0ym35ltFo" target="_blank"><div class="card-visual"><img src="https://img.youtube.com/vi/ev0ym35ltFo/hqdefault.jpg" alt="Borderlands 2"><div class="card-play-icon">&#9654;</div></div><div class="card-body"><div class="card-title">Borderlands 2</div><div class="card-desc">A bajillion guns, Handsome Jack's villain monologues, and co-op sessions that lasted until sunrise.</div><div class="card-tags"><span class="card-tag tag-pink">Looter Shooter</span><span class="card-tag tag-green">Co-op</span></div></div></a>
+
+        <a class="nostalgia-card" href="https://www.youtube.com/watch?v=nGQIQljaAc0" target="_blank"><div class="card-visual"><img src="https://img.youtube.com/vi/nGQIQljaAc0/hqdefault.jpg" alt="Far Cry 3"><div class="card-play-icon">&#9654;</div></div><div class="card-body"><div class="card-title">Far Cry 3</div><div class="card-desc">"Did I ever tell you what the definition of insanity is?" Vaas is the greatest villain in gaming history.</div><div class="card-tags"><span class="card-tag tag-yellow">Open World</span><span class="card-tag tag-blue">FPS</span></div></div></a>
+
+        <a class="nostalgia-card" href="https://www.youtube.com/watch?v=Y3Y1lbG0HkI" target="_blank"><div class="card-visual"><img src="https://img.youtube.com/vi/Y3Y1lbG0HkI/hqdefault.jpg" alt="Diablo 3"><div class="card-play-icon">&#9654;</div></div><div class="card-body"><div class="card-title">Diablo III</div><div class="card-desc">12 years of waiting and the servers crashed on launch day. Error 37 became a meme. Still played it all summer.</div><div class="card-tags"><span class="card-tag tag-purple">ARPG</span><span class="card-tag tag-green">Blizzard</span></div></div></a>
+      </div>
+    </div>
+
+    <!-- ===== MUSIC (iPod) ===== -->
+    <div class="tab-content" id="tab-music">
+      <div class="section-title">Songs That Were Always Playing</div>
+      <div class="ipod-wrapper">
+        <div class="ipod-device">
+          <div class="ipod-screen">
+            <div class="ipod-header">
+              <span class="ipod-header-title">iPod</span>
+              <span class="ipod-header-battery">&#9608;&#9608;&#9608;&#9604;</span>
+            </div>
+            <div class="ipod-now-playing">
+              <div class="ipod-album-art" id="ipod-album-art"><img id="ipod-art" src="https://img.youtube.com/vi/9bZkp7q19f0/hqdefault.jpg" alt="Album Art"></div>
+              <div class="ipod-song-title" id="ipod-title">Gangnam Style</div>
+              <div class="ipod-song-artist" id="ipod-artist">PSY</div>
+              <div class="ipod-progress"><div class="ipod-progress-bar" id="ipod-progress"></div></div>
+              <div class="ipod-time"><span id="ipod-elapsed">0:00</span><span id="ipod-duration">4:13</span></div>
+            </div>
+            <div class="ipod-playlist" id="ipod-playlist">
+              <div class="ipod-track active" data-idx="0"><span class="ipod-track-num">1</span><div class="ipod-track-info"><div class="ipod-track-name">Gangnam Style</div><div class="ipod-track-by">PSY</div></div><span class="ipod-track-dur">4:13</span></div>
+              <div class="ipod-track" data-idx="1"><span class="ipod-track-num">2</span><div class="ipod-track-info"><div class="ipod-track-name">Call Me Maybe</div><div class="ipod-track-by">Carly Rae Jepsen</div></div><span class="ipod-track-dur">3:25</span></div>
+              <div class="ipod-track" data-idx="2"><span class="ipod-track-num">3</span><div class="ipod-track-info"><div class="ipod-track-name">Somebody That I Used to Know</div><div class="ipod-track-by">Gotye ft. Kimbra</div></div><span class="ipod-track-dur">4:05</span></div>
+              <div class="ipod-track" data-idx="3"><span class="ipod-track-num">4</span><div class="ipod-track-info"><div class="ipod-track-name">We Are Young</div><div class="ipod-track-by">fun. ft. Janelle Mon&aacute;e</div></div><span class="ipod-track-dur">4:11</span></div>
+              <div class="ipod-track" data-idx="4"><span class="ipod-track-num">5</span><div class="ipod-track-info"><div class="ipod-track-name">Lights</div><div class="ipod-track-by">Ellie Goulding</div></div><span class="ipod-track-dur">3:34</span></div>
+              <div class="ipod-track" data-idx="5"><span class="ipod-track-num">6</span><div class="ipod-track-info"><div class="ipod-track-name">Bangarang</div><div class="ipod-track-by">Skrillex ft. Sirah</div></div><span class="ipod-track-dur">3:35</span></div>
+              <div class="ipod-track" data-idx="6"><span class="ipod-track-num">7</span><div class="ipod-track-info"><div class="ipod-track-name">Starships</div><div class="ipod-track-by">Nicki Minaj</div></div><span class="ipod-track-dur">3:31</span></div>
+              <div class="ipod-track" data-idx="7"><span class="ipod-track-num">8</span><div class="ipod-track-info"><div class="ipod-track-name">Payphone</div><div class="ipod-track-by">Maroon 5 ft. Wiz Khalifa</div></div><span class="ipod-track-dur">3:52</span></div>
+              <div class="ipod-track" data-idx="8"><span class="ipod-track-num">9</span><div class="ipod-track-info"><div class="ipod-track-name">Stronger</div><div class="ipod-track-by">Kelly Clarkson</div></div><span class="ipod-track-dur">3:42</span></div>
+            </div>
+          </div>
+          <!-- Click Wheel -->
+          <div class="ipod-wheel">
+            <span class="ipod-wheel-label wl-menu">MENU</span>
+            <span class="ipod-wheel-label wl-prev" onclick="ipodPrev()">&#9664;&#9664;</span>
+            <span class="ipod-wheel-label wl-next" onclick="ipodNext()">&#9654;&#9654;</span>
+            <span class="ipod-wheel-label wl-play" onclick="ipodPlayPause()">&#9654;&#10074;&#10074;</span>
+            <div class="ipod-wheel-center" onclick="ipodPlayPause()"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== MOVIES ===== -->
+    <div class="tab-content" id="tab-movies">
+      <div class="section-title">Movies That Broke The Box Office</div>
+      <div class="nostalgia-grid">
+        <a class="nostalgia-card" href="https://www.youtube.com/watch?v=eOrNdBpGMv8" target="_blank"><div class="card-visual"><img src="https://img.youtube.com/vi/eOrNdBpGMv8/hqdefault.jpg" alt="The Avengers"><div class="card-play-icon">&#9654;</div></div><div class="card-body"><div class="card-title">The Avengers</div><div class="card-desc">Iron Man, Cap, Thor, Hulk &mdash; all together for the first time. "I'm always angry." The theater lost its mind.</div><div class="card-tags"><span class="card-tag tag-blue">Marvel</span><span class="card-tag tag-green">$1.5B</span><span class="card-tag tag-pink">Iconic</span></div></div></a>
+
+        <a class="nostalgia-card" href="https://www.youtube.com/watch?v=GokKUqLcvD8" target="_blank"><div class="card-visual"><img src="https://img.youtube.com/vi/GokKUqLcvD8/hqdefault.jpg" alt="TDKR"><div class="card-play-icon">&#9654;</div></div><div class="card-body"><div class="card-title">The Dark Knight Rises</div><div class="card-desc">Bane broke the Bat. Nolan's epic conclusion to the greatest superhero trilogy. "You merely adopted the dark."</div><div class="card-tags"><span class="card-tag tag-purple">DC</span><span class="card-tag tag-yellow">Nolan</span></div></div></a>
+
+        <a class="nostalgia-card" href="https://www.youtube.com/watch?v=mfmrPu43DF8" target="_blank"><div class="card-visual"><img src="https://img.youtube.com/vi/mfmrPu43DF8/hqdefault.jpg" alt="Hunger Games"><div class="card-play-icon">&#9654;</div></div><div class="card-body"><div class="card-title">The Hunger Games</div><div class="card-desc">May the odds be ever in your favor. Jennifer Lawrence became the biggest star on the planet overnight.</div><div class="card-tags"><span class="card-tag tag-pink">Dystopia</span><span class="card-tag tag-green">J-Law</span></div></div></a>
+
+        <a class="nostalgia-card" href="https://www.youtube.com/watch?v=-tnxzJ0SSOw" target="_blank"><div class="card-visual"><img src="https://img.youtube.com/vi/-tnxzJ0SSOw/hqdefault.jpg" alt="Spider-Man"><div class="card-play-icon">&#9654;</div></div><div class="card-body"><div class="card-title">The Amazing Spider-Man</div><div class="card-desc">Andrew Garfield swinging through NYC. A fresh take on Spidey with Emma Stone as Gwen Stacy.</div><div class="card-tags"><span class="card-tag tag-blue">Marvel</span><span class="card-tag tag-yellow">Reboot</span></div></div></a>
+
+        <a class="nostalgia-card" href="https://www.youtube.com/watch?v=87E6N7ToCxs" target="_blank"><div class="card-visual"><img src="https://img.youtube.com/vi/87E6N7ToCxs/hqdefault.jpg" alt="Wreck-It Ralph"><div class="card-play-icon">&#9654;</div></div><div class="card-body"><div class="card-title">Wreck-It Ralph</div><div class="card-desc">A villain who wants to be a hero. Gaming references everywhere. "I'm gonna wreck it!"</div><div class="card-tags"><span class="card-tag tag-green">Animated</span><span class="card-tag tag-purple">Gaming</span></div></div></a>
+
+        <a class="nostalgia-card" href="https://www.youtube.com/watch?v=LKTH6f1JfX8" target="_blank"><div class="card-visual"><img src="https://img.youtube.com/vi/LKTH6f1JfX8/hqdefault.jpg" alt="Ted"><div class="card-play-icon">&#9654;</div></div><div class="card-body"><div class="card-title">Ted</div><div class="card-desc">Mark Wahlberg's thunder buddy. The R-rated teddy bear comedy that had no business being that funny.</div><div class="card-tags"><span class="card-tag tag-yellow">Comedy</span><span class="card-tag tag-pink">R-Rated</span></div></div></a>
+
+        <a class="nostalgia-card" href="https://www.youtube.com/watch?v=6kw1UVovByw" target="_blank"><div class="card-visual"><img src="https://img.youtube.com/vi/6kw1UVovByw/hqdefault.jpg" alt="Skyfall"><div class="card-play-icon">&#9654;</div></div><div class="card-body"><div class="card-title">Skyfall</div><div class="card-desc">The best Bond film in years. Adele's theme was hauntingly perfect. Javier Bardem was a menace.</div><div class="card-tags"><span class="card-tag tag-blue">007</span><span class="card-tag tag-green">Adele</span></div></div></a>
+
+        <a class="nostalgia-card" href="https://www.youtube.com/watch?v=0fUCuvNlOCg" target="_blank"><div class="card-visual"><img src="https://img.youtube.com/vi/0fUCuvNlOCg/hqdefault.jpg" alt="Django"><div class="card-play-icon">&#9654;</div></div><div class="card-body"><div class="card-title">Django Unchained</div><div class="card-desc">Tarantino at his finest. Leonardo DiCaprio as a villain, that dinner scene, and peak cinema dialogue.</div><div class="card-tags"><span class="card-tag tag-purple">Tarantino</span><span class="card-tag tag-yellow">Oscar</span></div></div></a>
+
+        <a class="nostalgia-card" href="https://www.youtube.com/watch?v=sftuxbvGwiU" target="_blank"><div class="card-visual"><img src="https://img.youtube.com/vi/sftuxbvGwiU/hqdefault.jpg" alt="Prometheus"><div class="card-play-icon">&#9654;</div></div><div class="card-body"><div class="card-title">Prometheus</div><div class="card-desc">Ridley Scott returned to the Alien universe. Visually stunning, endlessly debated.</div><div class="card-tags"><span class="card-tag tag-blue">Sci-Fi</span><span class="card-tag tag-pink">Alien</span></div></div></a>
+      </div>
+    </div>
+
+    <!-- ===== CHART ===== -->
+    <div class="tab-content" id="tab-chart">
+      <div class="chart-section" style="margin:0;"><div class="chart-header"><div class="chart-title"><span class="live-dot"></span> 2012/SOL Price Chart</div><div class="timeframes"><button class="tf-btn" data-tf="5m">5m</button><button class="tf-btn" data-tf="15m">15m</button><button class="tf-btn active" data-tf="1h">1H</button><button class="tf-btn" data-tf="4h">4H</button><button class="tf-btn" data-tf="1d">1D</button></div></div><div class="chart-container"><canvas id="priceChart"></canvas></div></div>
+      <div class="token-panel">
+        <div class="info-card"><div class="info-card-title">Token Info</div><div class="info-row"><span class="info-row-label">Name</span><span class="info-row-value">Me in 2012</span></div><div class="info-row"><span class="info-row-label">Ticker</span><span class="info-row-value" style="color:var(--neon-green)">$2012</span></div><div class="info-row"><span class="info-row-label">Chain</span><span class="info-row-value">Solana</span></div><div class="info-row"><span class="info-row-label">DEX</span><span class="info-row-value">PumpSwap</span></div><div class="info-row"><span class="info-row-label">Pair</span><span class="info-row-value mono">GCmL56Gw...JzfaYqT</span></div></div>
+        <div class="info-card"><div class="info-card-title">Trading Activity</div><div class="info-row"><span class="info-row-label">5m Txns</span><span class="info-row-value"><span style="color:var(--green)">3</span> / <span style="color:var(--red)">2</span></span></div><div class="info-row"><span class="info-row-label">1h Txns</span><span class="info-row-value"><span style="color:var(--green)">18</span> / <span style="color:var(--red)">12</span></span></div><div class="info-row"><span class="info-row-label">6h Txns</span><span class="info-row-value"><span style="color:var(--green)">89</span> / <span style="color:var(--red)">64</span></span></div><div class="info-row"><span class="info-row-label">24h Volume</span><span class="info-row-value" style="color:var(--green)">$30.5K</span></div><div class="info-row"><span class="info-row-label">Buy/Sell Vol</span><span class="info-row-value"><span style="color:var(--green)">$17.8K</span> / <span style="color:var(--red)">$12.7K</span></span></div></div>
+      </div>
+    </div>
+
+    <div class="remember-strip"><div class="remember-label">// REMEMBER WHEN...</div><div class="remember-text" id="remember-text"><span>Bitcoin was $5</span> and your friend said "it's fake internet money, don't bother"</div></div>
+
+    <footer class="site-footer">
+      <div class="footer-logo">$2012</div>
+      <div class="footer-text">ME IN 2012 &mdash; WHY DIDN'T YOU BUY BITCOIN?</div>
+      <div class="footer-links"><a href="https://dexscreener.com/solana/gcml56gw3gaurccwubenkp88fnfvzshv7wq7jzfayqt" target="_blank">DexScreener</a><a href="#" target="_blank">Twitter</a><a href="#" target="_blank">Telegram</a></div>
+    </footer>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+function enterSite() {
+  const es = document.getElementById('enter-screen'), ms = document.getElementById('main-site');
+  es.classList.add('hidden');
+  setTimeout(() => { es.style.display='none'; ms.classList.add('active'); document.body.style.overflow='auto'; startRememberCycle(); fetchLiveData(); setInterval(fetchLiveData, 30000); }, 800);
+}
+
+/* ============ LIVE DATA ============ */
+let liveBtcPrice = 100000;
+const PAIR_ADDR = 'GCmL56Gw3GAURccwUbeNKp88fNfvZShV7Wq7jzfaYqT';
+
+async function fetchLiveData() {
+  try {
+    // Fetch $2012 token data from DexScreener
+    const dexRes = await fetch('https://api.dexscreener.com/latest/dex/pairs/solana/' + PAIR_ADDR);
+    const dexData = await dexRes.json();
+    if (dexData.pair) {
+      const p = dexData.pair;
+      const price = parseFloat(p.priceUsd);
+      const chg = parseFloat(p.priceChange?.h24 || 0);
+      const mcap = p.marketCap || p.fdv || 0;
+      const liq = p.liquidity?.usd || 0;
+      const vol = p.volume?.h24 || 0;
+      const buys = p.txns?.h24?.buys || 0;
+      const sells = p.txns?.h24?.sells || 0;
+
+      // Format price with subscript zeros
+      document.getElementById('live-price').innerHTML = formatTokenPrice(price);
+
+      const chgEl = document.getElementById('live-change');
+      const arrow = chg >= 0 ? '&#9650;' : '&#9660;';
+      chgEl.innerHTML = arrow + ' ' + (chg >= 0 ? '+' : '') + chg.toFixed(2) + '% (24h)';
+      chgEl.className = 'price-change ' + (chg >= 0 ? 'positive' : 'negative');
+      if (chg >= 0) chgEl.style.cssText = 'color:var(--green);background:rgba(0,255,65,0.15);border:1px solid rgba(0,255,65,0.3);display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:4px;font-size:13px;font-weight:700;';
+      else chgEl.style.cssText = 'color:var(--red);background:rgba(255,59,59,0.15);border:1px solid rgba(255,59,59,0.3);display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:4px;font-size:13px;font-weight:700;';
+
+      document.getElementById('live-mcap').textContent = formatUSD(mcap);
+      document.getElementById('live-liq').textContent = formatUSD(liq);
+      document.getElementById('live-vol').textContent = formatUSD(vol);
+      document.getElementById('live-txns').textContent = (buys + sells).toLocaleString();
+      document.getElementById('live-buysell').innerHTML = '<span style="color:var(--green)">' + buys + '</span>/<span style="color:var(--red)">' + sells + '</span>';
+    }
+  } catch(e) { console.log('DexScreener fetch error:', e); }
+
+  try {
+    // Fetch live BTC price from CoinGecko
+    const btcRes = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
+    const btcData = await btcRes.json();
+    if (btcData.bitcoin) {
+      liveBtcPrice = btcData.bitcoin.usd;
+      const worth = (liveBtcPrice / 5.27) * 5;
+      document.getElementById('btc-today-val').textContent = '$' + Math.round(worth).toLocaleString();
+    }
+  } catch(e) { console.log('BTC fetch error:', e); }
+}
+
+function formatTokenPrice(price) {
+  if (price >= 0.01) return '$' + price.toFixed(4);
+  const str = price.toFixed(20);
+  const match = str.match(/^0\.(0+)(\d{4})/);
+  if (match) {
+    const zeros = match[1].length;
+    const digits = match[2];
+    const sub = String.fromCharCode(0x2080 + zeros);
+    return '$0.0<span class="dim">' + sub + '</span>' + digits;
+  }
+  return '$' + price.toFixed(8);
+}
+
+function formatUSD(n) {
+  if (n >= 1e9) return '$' + (n/1e9).toFixed(1) + 'B';
+  if (n >= 1e6) return '$' + (n/1e6).toFixed(1) + 'M';
+  if (n >= 1e3) return '$' + (n/1e3).toFixed(1) + 'K';
+  return '$' + Math.round(n).toLocaleString();
+}
+document.querySelectorAll('.nav-tab').forEach(tab => { tab.addEventListener('click', () => {
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  tab.classList.add('active'); document.getElementById('tab-'+tab.dataset.tab).classList.add('active');
+  if(tab.dataset.tab==='chart'&&!chart) setTimeout(initChart,100);
+}); });
+document.querySelectorAll('.tf-btn').forEach(btn => { btn.addEventListener('click', () => {
+  document.querySelectorAll('.tf-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
+  if(chart) updateChart(btn.dataset.tf);
+}); });
+
+let chart;
+function generatePriceData(p,b,v,t){const d=[];let pr=b;for(let i=0;i<p;i++){pr=Math.max(pr*(1+(Math.random()-0.48+t)*v),b*0.3);d.push(pr);}return d;}
+function generateLabels(p,tf){const l=[];const n=new Date();for(let i=p-1;i>=0;i--){const d=new Date(n);switch(tf){case'5m':d.setMinutes(d.getMinutes()-i*5);break;case'15m':d.setMinutes(d.getMinutes()-i*15);break;case'1h':d.setHours(d.getHours()-i);break;case'4h':d.setHours(d.getHours()-i*4);break;case'1d':d.setDate(d.getDate()-i);break;}l.push(d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}));}return l;}
+const tfConfig={'5m':{points:60,vol:0.012,trend:-0.002},'15m':{points:48,vol:0.018,trend:-0.003},'1h':{points:24,vol:0.035,trend:-0.008},'4h':{points:30,vol:0.06,trend:-0.01},'1d':{points:14,vol:0.12,trend:-0.02}};
+function initChart(){const c=document.getElementById('priceChart');if(!c)return;const x=c.getContext('2d'),cfg=tfConfig['1h'],pr=generatePriceData(cfg.points,0.00003122,cfg.vol,cfg.trend),lb=generateLabels(cfg.points,'1h'),g=x.createLinearGradient(0,0,0,340);g.addColorStop(0,'rgba(0,255,65,0.15)');g.addColorStop(1,'rgba(0,255,65,0)');
+chart=new Chart(x,{type:'line',data:{labels:lb,datasets:[{data:pr,borderColor:'#00ff41',borderWidth:2,backgroundColor:g,fill:true,tension:0.3,pointRadius:0,pointHitRadius:10,pointHoverRadius:4,pointHoverBackgroundColor:'#00ff41',pointHoverBorderColor:'#fff',pointHoverBorderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(18,18,26,0.95)',borderColor:'rgba(0,255,65,0.3)',borderWidth:1,titleColor:'#8888aa',bodyColor:'#00ff41',bodyFont:{family:'VT323',size:16},titleFont:{family:'Space Mono',size:11},padding:12,displayColors:false,callbacks:{label:c=>'$'+c.parsed.y.toFixed(8)}}},scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#8a8aaa',font:{family:'Space Mono',size:10},maxTicksLimit:8},border:{display:false}},y:{position:'right',grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#8a8aaa',font:{family:'VT323',size:13},callback:v=>'$'+v.toFixed(7),maxTicksLimit:6},border:{display:false}}}}});}
+function updateChart(tf){if(!chart)return;const c=tfConfig[tf];chart.data.labels=generateLabels(c.points,tf);chart.data.datasets[0].data=generatePriceData(c.points,0.00003122,c.vol,c.trend);chart.update('active');}
+
+function getMemories() {
+  const btcNow = '$' + liveBtcPrice.toLocaleString();
+  const worth100 = '$' + Math.round((100/5.27)*liveBtcPrice).toLocaleString();
+  return [
+    '<span>Bitcoin was $5</span> and your friend said "it\'s fake internet money, don\'t bother"',
+    'You could have bought <span>200 BTC for $1,000</span> &mdash; that\'s <span>' + '$' + Math.round(200*liveBtcPrice).toLocaleString() + '</span> today',
+    'You were grinding <span>prestige in MW3</span> while BTC was the real grind',
+    '<span>YOLO</span> was a valid excuse for everything except buying Bitcoin apparently',
+    'You spent your <span>$5 on a McChicken</span> instead of 1 BTC &mdash; now worth <span>' + btcNow + '</span>',
+    'The <span>iPod Touch</span> was the most important thing you owned &mdash; not a BTC wallet',
+    'You thought <span>dubstep</span> was the future &mdash; turns out it was cryptocurrency',
+    '<span>Snapback hats</span> and <span>OBEY</span> shirts were peak drip but not peak investing',
+    'Your Facebook status was some <span>passive-aggressive song lyric</span> instead of "just bought BTC"',
+    'You thought the <span>Mayan apocalypse</span> on 12/21/12 was scarier than missing $5 Bitcoin',
+    'If you bought <span>$100 of BTC in 2012</span> you\'d have <span>' + worth100 + '</span> today',
+  ];
+}
+const memories = getMemories();
+let memIdx=0;
+function startRememberCycle(){setInterval(()=>{const mems=getMemories();memIdx=(memIdx+1)%mems.length;const el=document.getElementById('remember-text');el.style.opacity=0;setTimeout(()=>{el.innerHTML=mems[memIdx];el.style.opacity=1;},400);},5000);}
+document.getElementById('remember-text').style.transition='opacity 0.4s ease';
+
+/* ============ iPOD PLAYER (Local MP3s) ============ */
+const ipodTracks = [
+  { title:'Gangnam Style', artist:'PSY', art:'9bZkp7q19f0', file:'music/01-gangnam-style.mp3', dur:'4:13' },
+  { title:'Call Me Maybe', artist:'Carly Rae Jepsen', art:'fWNaR-rxAic', file:'music/02-call-me-maybe.mp3', dur:'3:25' },
+  { title:'Somebody That I Used to Know', artist:'Gotye ft. Kimbra', art:'8UVNT4wvIGY', file:'music/03-somebody-that-i-used-to-know.mp3', dur:'4:05' },
+  { title:'We Are Young', artist:'fun. ft. Janelle Monáe', art:'Sv6dMFF_yts', file:'music/04-we-are-young.mp3', dur:'4:11' },
+  { title:'Lights', artist:'Ellie Goulding', art:'0NKUpo_xKyQ', file:'music/05-lights.mp3', dur:'3:34' },
+  { title:'Bangarang', artist:'Skrillex ft. Sirah', art:'cR2XilcGYOo', file:'music/06-bangarang.mp3', dur:'3:35' },
+  { title:'Starships', artist:'Nicki Minaj', art:'SeIJmciN8mo', file:'music/07-starships.mp3', dur:'3:31' },
+  { title:'Payphone', artist:'Maroon 5 ft. Wiz Khalifa', art:'KRaWnd3LJfs', file:'music/08-payphone.mp3', dur:'3:52' },
+  { title:'Stronger', artist:'Kelly Clarkson', art:'Xn676-fLq7I', file:'music/09-stronger.mp3', dur:'3:42' },
+];
+let ipodCurrent = 0, ipodPlaying = false, ipodTimer = null;
+const ipodAudio = new Audio();
+ipodAudio.preload = 'auto';
+
+ipodAudio.addEventListener('ended', () => { ipodNext(); });
+ipodAudio.addEventListener('timeupdate', () => {
+  if (!ipodAudio.duration) return;
+  const elapsed = Math.floor(ipodAudio.currentTime);
+  const pct = (ipodAudio.currentTime / ipodAudio.duration) * 100;
+  document.getElementById('ipod-progress').style.width = pct + '%';
+  const m = Math.floor(elapsed/60), s = elapsed%60;
+  document.getElementById('ipod-elapsed').textContent = m+':'+(s<10?'0':'')+s;
+});
+ipodAudio.addEventListener('loadedmetadata', () => {
+  const dur = Math.floor(ipodAudio.duration);
+  const m = Math.floor(dur/60), s = dur%60;
+  document.getElementById('ipod-duration').textContent = m+':'+(s<10?'0':'')+s;
+});
+
+function ipodUpdateUI(idx) {
+  const t = ipodTracks[idx];
+  document.getElementById('ipod-art').src = 'https://img.youtube.com/vi/'+t.art+'/hqdefault.jpg';
+  document.getElementById('ipod-title').textContent = t.title;
+  document.getElementById('ipod-artist').textContent = t.artist;
+  document.getElementById('ipod-duration').textContent = t.dur;
+  document.getElementById('ipod-elapsed').textContent = '0:00';
+  document.getElementById('ipod-progress').style.width = '0%';
+  document.querySelectorAll('.ipod-track').forEach(el => el.classList.remove('active'));
+  const activeTrack = document.querySelector('.ipod-track[data-idx="'+idx+'"]');
+  if (activeTrack) { activeTrack.classList.add('active'); activeTrack.scrollIntoView({block:'nearest'}); }
+}
+
+function ipodLoadTrack(idx) {
+  ipodCurrent = idx;
+  ipodUpdateUI(idx);
+  ipodAudio.src = ipodTracks[idx].file;
+  ipodAudio.play().then(() => { ipodPlaying = true; }).catch(e => console.log('Play error:', e));
+}
+
+function ipodPlayPause() {
+  if (!ipodAudio.src || ipodAudio.src === location.href) {
+    ipodLoadTrack(ipodCurrent);
+    return;
+  }
+  if (ipodPlaying) {
+    ipodAudio.pause();
+    ipodPlaying = false;
+  } else {
+    ipodAudio.play().then(() => { ipodPlaying = true; }).catch(e => console.log('Play error:', e));
+  }
+}
+
+function ipodNext() {
+  ipodCurrent = (ipodCurrent + 1) % ipodTracks.length;
+  ipodLoadTrack(ipodCurrent);
+}
+
+function ipodPrev() {
+  if (ipodAudio.currentTime > 3) { ipodAudio.currentTime = 0; return; }
+  ipodCurrent = (ipodCurrent - 1 + ipodTracks.length) % ipodTracks.length;
+  ipodLoadTrack(ipodCurrent);
+}
+
+document.querySelectorAll('.ipod-track').forEach(el => {
+  el.addEventListener('click', () => { ipodLoadTrack(parseInt(el.dataset.idx)); });
+});
+</script>
+</body>
+</html>
