@@ -357,24 +357,103 @@ canvas#priceChart { width: 100% !important; height: 100% !important; }
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
-  .header-right { gap: 8px; } .dex-link { display: none; }
-  .nostalgia-hero { padding: 40px 16px; }
-  .nostalgia-nav { padding: 0 8px; overflow-x: auto; justify-content: flex-start; }
-  .nav-tab { padding: 12px 16px; font-size: 9px; white-space: nowrap; }
-  .tab-content { padding: 16px; }
-  .nostalgia-grid { grid-template-columns: 1fr; }
-  .chart-container { height: 260px; }
-  .remember-strip { margin: 0 16px 16px; }
-  .price-bar { padding: 10px 16px; }
-  .site-header { padding: 10px 16px; }
+  .header-right { gap: 8px; }
+  .dex-link { display: none; }
+  .site-header { padding: 10px 12px; }
+  .logo-ticker { font-size: 12px; }
+  .logo-name { font-size: 10px; }
+  .chain-badge { font-size: 9px; padding: 3px 8px; }
+  .buy-btn { padding: 8px 14px; font-size: 11px; }
+
+  .nostalgia-hero { padding: 30px 16px; }
+  .hero-subtext { font-size: 12px; padding: 0 8px; }
+
+  .btc-was-5 { padding: 14px 12px; }
+  .btc5-inner { flex-direction: column; gap: 10px; }
+  .btc5-icon { font-size: 28px; }
+  .btc5-sub { font-size: clamp(12px, 3.5vw, 18px); }
+
+  .price-bar { padding: 10px 12px; flex-direction: column; align-items: flex-start; }
+  .price-bar-left { flex-wrap: wrap; gap: 8px; }
+  .price-bar-ticker { font-size: 13px; }
+  .price-bar-value { font-size: 22px; }
+  .price-bar-stats { width: 100%; justify-content: space-between; gap: 10px; }
+  .price-bar-stat-label { font-size: 8px; }
+  .price-bar-stat-val { font-size: 15px; }
+
+  .nostalgia-nav { padding: 0 8px; overflow-x: auto; justify-content: flex-start; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .nostalgia-nav::-webkit-scrollbar { display: none; }
+  .nav-tab { padding: 10px 14px; font-size: 8px; white-space: nowrap; min-width: max-content; }
+  .nav-tab .tab-icon { font-size: 16px; }
+
+  .tab-content { padding: 12px; }
+  .nostalgia-grid { grid-template-columns: 1fr; gap: 12px; }
+  .card-visual { height: 160px; }
+  .card-body { padding: 12px; }
+  .card-title { font-size: 9px; }
+  .card-desc { font-size: 11px; }
+
+  .chart-container { height: 240px; padding: 12px; }
+  .chart-header { flex-direction: column; gap: 10px; align-items: flex-start; padding: 12px; }
+  .timeframes { flex-wrap: wrap; }
+  .token-panel { grid-template-columns: 1fr; }
+
+  .ipod-wrapper { padding: 10px 0; }
+  .ipod-device { width: 90%; max-width: 320px; padding: 16px; border-radius: 24px; }
+  .ipod-album-art { width: 160px; height: 160px; }
+  .ipod-wheel { width: 170px; height: 170px; margin: 14px auto 4px; }
+  .ipod-wheel-center { width: 60px; height: 60px; }
+  .ipod-wheel-label { font-size: 10px; }
+  .wl-prev { left: 14px; font-size: 14px; }
+  .wl-next { right: 14px; font-size: 14px; }
+  .wl-menu { top: 10px; }
+  .wl-play { bottom: 10px; font-size: 12px; }
+  .ipod-song-title { font-size: 7px; }
+  .ipod-playlist { max-height: 150px; }
+
+  .remember-strip { margin: 0 12px 16px; padding: 14px; }
+  .remember-strip .remember-text { font-size: 18px; }
+
+  .btc-breaking { width: 90%; padding: 8px 12px; bottom: 5%; }
+  .btc-breaking .breaking-text { font-size: clamp(12px, 3vw, 20px); }
+  .btc-breaking .breaking-text .br-price { font-size: clamp(14px, 3.5vw, 28px); }
+
+  .site-footer { padding: 30px 16px; }
+  .footer-logo { font-size: 14px; }
+  .footer-links { flex-wrap: wrap; gap: 14px; }
+}
+
+/* Touch devices - show play icons always (no hover) */
+@media (hover: none) {
+  .card-play-icon { opacity: 0.8; }
+  .nostalgia-card:hover { transform: none; }
+}
+
+/* Small phones */
+@media (max-width: 380px) {
+  .hero-main-title { font-size: 28px; }
+  .price-bar-stats { gap: 6px; }
+  .price-bar-stat { flex: 1; min-width: 0; }
+  .nav-tab { padding: 8px 10px; font-size: 7px; }
+  .ipod-device { width: 95%; padding: 12px; border-radius: 20px; }
+  .ipod-album-art { width: 130px; height: 130px; }
+  .ipod-wheel { width: 150px; height: 150px; }
+  .ipod-wheel-center { width: 52px; height: 52px; }
+  .btc5-headline { font-size: 10px; }
 }
 
 #main-site::-webkit-scrollbar { width: 6px; }
 #main-site::-webkit-scrollbar-track { background: transparent; }
 #main-site::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
 
-/* Subtle scanlines */
-.site-content::after { content: ''; position: fixed; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.02) 3px, rgba(0,0,0,0.02) 6px); pointer-events: none; z-index: 999; }
+/* Subtle scanlines - disable on mobile for performance */
+@media (min-width: 769px) {
+  .site-content::after { content: ''; position: fixed; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.02) 3px, rgba(0,0,0,0.02) 6px); pointer-events: none; z-index: 999; }
+}
+
+/* Prevent horizontal overflow on mobile */
+html, body { overflow-x: hidden; }
+#main-site { -webkit-overflow-scrolling: touch; }
 </style>
 </head>
 <body>
